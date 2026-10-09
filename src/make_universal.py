@@ -26,7 +26,7 @@ os.makedirs(os.path.join(OUT, "viewer"), exist_ok=True)
 C = 0.15                     # panel clearance in its opening, each side
 TG, TGC = 1.2, 0.15          # tongue thickness (the panel's inner half) and its clearance in the groove
 TD = 1.2                     # how far a tongue reaches into its groove
-TOP_GAP = 0.45               # a panel stops this far below the roof's underside and its tongue this far short of the roof groove's top, so a printed panel (taller by its first-layer squash and its ears' stubs) never props the shell up (a test print: the shell did not seat)
+TOP_GAP = 0.70             # a panel stops this far below the roof's underside and its tongue this far short of the roof groove's top, so a printed panel (taller by its first-layer squash and its ears' stubs) never props the shell up (a test print: the shell did not seat)
 RIB = 1.45                   # the inner lip that closes a groove inside a straight wall
 EASE = 0.15                  # the shell's opening and grooves this much wider on every side than C/TGC alone, so the
                              # top slides over the standing panels more easily (a test print, 2026-10-06)
