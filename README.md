@@ -134,6 +134,7 @@ writes it to `build/checks/` (git-ignored):
 | `make_led_holder_check.py` | the LED corner: tube vs RGB block, how far each holder reaches into the shell |
 | `make_switch_check.py` | the switch bracket with two 6x6x5 tact switches: where a switch hits the bracket |
 | `make_fit_coupon.py` | a small test print of the universal shell's front opening + the blank panel, to try the panel clearance without printing a shell |
+| `make_switch_coupon.py` | a 44x9x21 mm test print of the switch pockets (6.8 mm) and leg holes (2.0 mm), to try the tactile switches before printing the base |
 
 ## Printing (ASA or PLA, no supports)
 
