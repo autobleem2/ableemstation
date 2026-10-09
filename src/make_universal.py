@@ -26,6 +26,7 @@ os.makedirs(os.path.join(OUT, "viewer"), exist_ok=True)
 C = 0.15                     # panel clearance in its opening, each side
 TG, TGC = 1.2, 0.15          # tongue thickness (the panel's inner half) and its clearance in the groove
 TD = 1.2                     # how far a tongue reaches into its groove
+TOP_GAP = 0.45               # a panel stops this far below the roof's underside and its tongue this far short of the roof groove's top, so a printed panel (taller by its first-layer squash and its ears' stubs) never props the shell up (a test print: the shell did not seat)
 RIB = 1.45                   # the inner lip that closes a groove inside a straight wall
 EASE = 0.15                  # the shell's opening and grooves this much wider on every side than C/TGC alone, so the
                              # top slides over the standing panels more easily (a test print, 2026-10-06)
@@ -82,8 +83,8 @@ def cut_opening(s, name):
 def panel(name, cuts=()):
     """the bare panel for an opening, minus the port windows (world-space solids)"""
     wall, a0, a1, (f0, f1), _, _ = OPENINGS[name]
-    p = wbox(wall, a0 + C, 0, 0, a1 - a0 - 2 * C, WALL, ZT - C)                              # the outer plate
-    p += wbox(wall, a0 - TD, WALL - TG, 0, a1 - a0 + 2 * TD, TG, ZT + TD)                    # the tongue
+    p = wbox(wall, a0 + C, 0, 0, a1 - a0 - 2 * C, WALL, ZT - TOP_GAP)                            # the outer plate
+    p += wbox(wall, a0 - TD, WALL - TG, 0, a1 - a0 + 2 * TD, TG, ZT + TD - TOP_GAP)                  # the tongue
     p += wprofile(wall, f0, f1 - f0, TAB)                      # the tab that stands in the base's rebate
     p -= prism(outline(), BAND - 1.2, 1.2) - prism(outline(0.8), BAND - 1.3, 1.4)          # the waist groove runs on
     for c in cuts:
@@ -276,7 +277,7 @@ EAR_RELIEF = 1.2      # the first layers squash wider (elephant foot): the fin k
 def ears(name):
     """the two outriggers of an opening's panel, with their bridges (world space, like panel())"""
     wall, a0, a1, _, _, _ = OPENINGS[name]
-    top = (ZT + TD) * EAR_H
+    top = (ZT + TD - TOP_GAP) * EAR_H
     vc = WALL - TG / 2                                         # the tongue's middle, across the wall
     fin = [(-EAR_OUT, 0), (WALL + EAR_OUT, 0), (WALL + EAR_OUT, EAR_FOOT[1]), (vc + 0.6, top), (vc - 0.6, top),
            (-EAR_OUT, EAR_FOOT[1])]
