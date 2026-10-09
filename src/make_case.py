@@ -201,8 +201,8 @@ def base():
         # a well from behind round the whole switch (its pocket + SW_WELL_MARGIN each side), so only SW_MEMBRANE of the
         # back wall is left under it: the legs (3.2 mm out of the body) then stand ~2.4 mm clear to bend and solder
         # (a test print: 1.8 mm left ~1.2)
-        b -= box(x - SW_POCKET_X / 2 - SW_WELL_MARGIN, yb - 1, BTN_Z - SW_POCKET_Z / 2 - SW_WELL_MARGIN,
-                 SW_POCKET_X + 2 * SW_WELL_MARGIN, 1 + SW_BACK - SW_MEMBRANE, SW_POCKET_Z + 2 * SW_WELL_MARGIN)
+        b -= box(x - SW_POCKET_X / 2 - SW_WELL_MARGIN[0], yb - 1, BTN_Z - SW_POCKET_Z / 2 - SW_WELL_MARGIN[1],
+                 SW_POCKET_X + 2 * SW_WELL_MARGIN[0], 1 + SW_BACK - SW_MEMBRANE, SW_POCKET_Z + 2 * SW_WELL_MARGIN[1])
     return b
 
 
@@ -211,9 +211,9 @@ SW_LEGS = [(sx * 3.25, sz * 2.25) for sx in (-1, 1) for sz in (-1, 1)]
 SW_LEG_R, SW_BACK = 1.0, 1.8            # a leg's hole: 2.0 mm round (a leg is ~0.7 x 0.3, some switches have wider ones; printed holes come out smaller)
 # the body's pocket: the switch measures 6.02 (up-down) x 6.51 (left-right: the side-mounted legs add ~0.25 each side);
 # printed holes come out ~0.2 smaller than modelled (a test print: 6.8 printed 6.6, 6.3 was too tight), so model the
-# measured size + 0.25 clearance + 0.2 shrink
-SW_POCKET_X, SW_POCKET_Z = 6.96, 6.47
-SW_WELL_MARGIN, SW_MEMBRANE = 1.0, 0.6  # the rear well: the pocket + this much each side; the wall left under it (4 layers at 0.16)
+# measured size + ~0.12 clearance + the shrink seen on the second coupon
+SW_POCKET_X, SW_POCKET_Z = 6.70, 6.25   # coupon 2: 6.96 x 6.47 printed 6.90 x 6.35 (shrink 0.06 x 0.12), loose by 0.39 x 0.33 -> aim at +0.12 clearance
+SW_WELL_MARGIN, SW_MEMBRANE = (3.0, 1.0), 0.6  # the rear well: the pocket + this much each side (x, z; 3 mm in x so the side legs can be bent outward and soldered); the wall left under it (4 layers at 0.16)
 
 
 def switch_floor():
