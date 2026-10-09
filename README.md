@@ -10,8 +10,8 @@ frontend: the buttons are plain Linux key and shutdown events), but nothing in i
 ## Status: draft
 
 This is a **draft**. The case has been through several test prints, but several newer parts have **not** been fully
-test-printed yet: the one-piece universal bottoms (base with welded panels), the front-USB snap-in cradles, the
-breakaway ears and tab props, and the latest base / shell tweaks. Expect a tolerance round when you print them, and
+test-printed yet: the one-piece universal bottoms (base with welded panels), the front-USB snap-in cradles, and
+the latest base / shell tweaks. Expect a tolerance round when you print them, and
 please report what you find. Also:
 
 - The **RGB colour service** (green while the Pi runs, orange at shutdown and in standby) is not part of this repository.
@@ -209,24 +209,15 @@ and most of the shell are the Pi 3 case's. What differs are the ports on two edg
 - **Printing - four prints**: the shell, the **bottom**, the button tree and the lens. The bottom
   (`uni-bottom-<board>-<front>.3mf`, e.g. `uni-bottom-pi4-usb`) is the base with that option's three panels standing
   in their rebates - one object of four parts in Orca. Print it as it is: each panel's tab sits on its seat, so the
-  panels weld to the base and the bottom comes off the bed in one piece (nothing to assemble, no ears, no props).
+  panels weld to the base and the bottom comes off the bed in one piece (nothing to assemble).
   With the front USB there is also `uni-bottom-<board>-usb-open`: the rear USB block that feeds the front stays
   open (use the front or the rear, not both at once). The panels' filament change below applies to it: the base starts in the band colour and its few tall bits (the
   standoffs, the USB cradles) end in the top colour, inside the case. The viewer's download picks the bottom of the
   option on screen. The separate panels below stay for a board swap or a reprint of one wall.
 - **Printing the panels on their own**: panels print **standing** on their bottom edge, so a filament change gives them the shell's two
   colours on the same line: **10.92 mm = layer 68** with 0.16 mm layers, **10.80 mm = layer 45** with 0.24 mm (`make_universal.py` prints
-  both). Dark first, then the top colour. The plain files have no supports: the tab's underside hangs over the
-  bed, so print the `-ears` files (below); the panels are 2.4 mm thick where they stand, so use a brim (the Orca
-  profiles' mouse ears or a 5 mm brim).
+  both). Dark first, then the top colour. The panels are 2.4 mm thick where they stand, so use a brim (the Orca profiles' mouse ears or a 5 mm brim).
   `ableemstation-panels-all.3mf` has every panel on one plate.
-  **Breakaway ears**: every panel also comes as `panel-…-ears.3mf` (and `panels-all-ears.3mf`) - at each end a fin
-  across the panel on a two-layer foot holds it upright while it prints. The fin stands 0.4 mm off the tongue's end
-  (further in the first 1.2 mm, where the first layers squash wider) on two small bridges: hold the panel next to
-  the ear, twist the fin off sideways when the print is cold, and trim what is left of the bridges flush with a
-  knife, so the tongue slides into its groove (the tongue's end hides in the groove, so nothing shows).
-  The same files carry **tab props**: a row of fins on a two-layer foot under the tab inside the panel, one layer of
-  air below the tab and 0.5 mm off the panel, so they touch nothing - pull the row out when the print is cold.
   Shells, `uni-base`, buttons and lens as for the Pi 3 case (the buttons and lens files are the same).
 - **POWER on a Pi 5**: GPIO3 shuts it down (`dtoverlay=gpio-shutdown`) but cannot wake it from halt. Wire the POWER
   button to the board's **J2** pads (the power-button header) instead: it then works like the board's own button.

@@ -8,7 +8,7 @@ design numbers and the rules behind them. The user-facing description is `README
 
 ```
 src/make_case.py        the Pi 3 case: shell, base, button tree, lens, LED holder; the fit checks; STEP/STL/3MF
-src/make_universal.py   the universal case (Pi 2/3/3B+/4/5): port panels, uni-base, uni-bottom, shells, ears/props
+src/make_universal.py   the universal case (Pi 2/3/3B+/4/5): port panels, uni-base, uni-bottom, shells
 src/make_stickers.py    the stickers (SVG, PNG, A4 PDF, Cricut PNGs), two sets: default and special/
 src/make_viewer.py      the two 3D viewers (HTML, three.js) + the renders + the colourways + "Download ZIP" pack
 src/make_wiring.py      the two wiring diagrams (plain LED, RGB pixel)
@@ -97,8 +97,8 @@ from (3.5, 3.5), from Raspberry Pi Ltd's drawings (3B+, 4B, 5).
   side (`EASE`) so the top slides over standing panels. Panels sit in rebates of the base (tab seat 1 mm below the
   plate top); in the one-piece bottom the tabs are welded to the base with a 0.6 mm joint fill.
 - **Print orientation of panels**: standing on the bottom edge, so a filament change gives them the shell's colours at
-  the same line. Plain files have no supports; the `-ears` files add breakaway fins (0.4 mm off the tongue end, 1.2 mm
-  relief where the first layers squash) and tab props (one layer of air below the tab, 0.5 mm off the panel).
+  the same line. Panels are printed fused to the base in
+  the one-piece bottoms; the separate panel files print standing, with a brim.
   Panel "noses" (extra locating bumps) were tried and removed.
 - **Front USB** (universal): the common 17 x 17 mm "USB-A to DIP" breakout board lies flat on base pedestals, held by two
   ~1.85 mm sheet-metal screws in 1.7 mm holes (1.9 mm gripped too little). The socket sits 1.3 mm above the board

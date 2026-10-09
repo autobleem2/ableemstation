@@ -26,7 +26,7 @@ os.makedirs(os.path.join(OUT, "viewer"), exist_ok=True)
 C = 0.15                     # panel clearance in its opening, each side
 TG, TGC = 1.2, 0.15          # tongue thickness (the panel's inner half) and its clearance in the groove
 TD = 1.2                     # how far a tongue reaches into its groove
-TOP_GAP = 0.70             # a panel stops this far below the roof's underside and its tongue this far short of the roof groove's top, so a printed panel (taller by its first-layer squash and its ears' stubs) never props the shell up (a test print: the shell did not seat)
+TOP_GAP = 0.70             # a panel stops this far below the roof's underside and its tongue this far short of the roof groove's top, so a printed panel (taller by its first-layer squash) never props the shell up (a test print: the shell did not seat)
 RIB = 1.45                   # the inner lip that closes a groove inside a straight wall
 EASE = 0.15                  # the shell's opening and grooves this much wider on every side than C/TGC alone, so the
                              # top slides over the standing panels more easily (a test print, 2026-10-06)
@@ -63,7 +63,7 @@ def wprofile(wall, u0, du, pts):
 
 
 # the panel's tab: it stands in a rebate along the base's edge (seat at z = SEAT), its underside first rising from the
-# panel, then flat - printed standing it hangs over the bed, so the -ears files carry props under it (tab_props)
+# panel, then flat (the panels are printed fused to the base, see write_bottom)
 SEAT = BASE_T - 1.0
 TAB = [(WALL - 0.3, SEAT - 0.8), (WALL + 0.8, SEAT), (WALL + 2.5, SEAT), (WALL + 2.5, BASE_T + 1.7), (WALL - 0.3, BASE_T + 1.7)]
 
@@ -261,62 +261,8 @@ def write_3mf(name, part):
 def write_bottom(name, parts):
     """the base and its three panels as ONE object of four named parts, standing where they are assembled: a slicer
     keeps it one object and welds the parts where they touch (each panel's tab on its seat), so the base and the panels
-    print as one piece - no ears, no props, nothing to assemble"""
+    print as one piece - nothing to assemble"""
     write_parts_3mf(os.path.join(OUT, "ableemstation-%s.3mf" % name), "ableemstation-" + name, parts)
-
-
-# breakaway ears: a panel prints standing on a 2.4 mm edge, about 10 times as tall as it is thick, so each end gets an
-# outrigger - a fin across the panel on a two-layer foot - that holds it upright and comes off by hand afterwards. The
-# fin stands 0.4 mm off the tongue's end and hangs on two small bridges there: the tongue's end lives in the wall's
-# groove, so what is left of a bridge never shows (trim it flush with a knife so the tongue slides in)
-EAR_T, EAR_GAP, EAR_OUT, EAR_FOOT = 1.2, 0.4, 8.0, (6.5, 0.4)   # fin thickness, gap, reach each side, foot length + height
-EAR_H = 0.6                                                     # fin height, of the panel's
-EAR_RELIEF = 1.2      # the first layers squash wider (elephant foot): the fin keeps away from the tongue below this
-
-
-def ears(name):
-    """the two outriggers of an opening's panel, with their bridges (world space, like panel())"""
-    wall, a0, a1, _, _, _ = OPENINGS[name]
-    top = (ZT + TD - TOP_GAP) * EAR_H
-    vc = WALL - TG / 2                                         # the tongue's middle, across the wall
-    fin = [(-EAR_OUT, 0), (WALL + EAR_OUT, 0), (WALL + EAR_OUT, EAR_FOOT[1]), (vc + 0.6, top), (vc - 0.6, top),
-           (-EAR_OUT, EAR_FOOT[1])]
-    foot = [(-EAR_OUT, 0), (WALL + EAR_OUT, 0), (WALL + EAR_OUT, EAR_FOOT[1]), (-EAR_OUT, EAR_FOOT[1])]
-    e = None
-    for end, out in ((a0 - TD, -1), (a1 + TD, 1)):             # the tongue's two ends; out = away from the panel
-        f0 = end + out * EAR_GAP if out > 0 else end - EAR_GAP - EAR_T
-        part = wprofile(wall, f0, EAR_T, fin)
-        part += wprofile(wall, f0 if out > 0 else f0 - EAR_FOOT[0] + EAR_T, EAR_FOOT[0], foot)
-        # in line with the tongue the fin and its foot start only above EAR_RELIEF, so the squashed first layers
-        # cannot weld them to the tongue's foot - the nearest material down there is the foot, a fin's thickness away
-        part -= wbox(wall, f0 - 0.01, WALL - TG - 0.6, -1, EAR_T + 0.02, TG + 1.2, EAR_RELIEF + 1)
-        for z in (3.0, top - 3.0):                             # two bridges, 1 x 0.8 mm, across the gap into the tongue
-            u = end - EAR_GAP - 0.05 if out < 0 else end - 0.05
-            part += wbox(wall, u, WALL - TG + 0.1, z, EAR_GAP + 0.1, TG - 0.2, 0.8)
-        e = part if e is None else e + part
-    return e
-
-
-# breakaway props under the tab: standing, the tab's underside hangs 1.4-2 mm over the bed (its 45-degree start is too
-# short to carry it), so a row of fins on a two-layer foot holds it up. They stop SUP_GAP under it - one layer of air,
-# the way a slicer's support leaves it - and SUP_SIDE off the panel's inner face, so nothing welds; the row comes out
-# in one piece
-SUP_T, SUP_PITCH, SUP_GAP, SUP_SIDE, SUP_FOOT = 0.9, 4.0, 0.25, 0.5, 0.4   # fin, fin pitch, gap under the tab, side gap, foot
-
-
-def tab_props(name):
-    """the fins under an opening's panel tab, on their foot (world space, like panel())"""
-    wall, _, _, (f0, f1), _, _ = OPENINGS[name]
-    (v0, z0), (v1, z1), _, (v2, _), _ = TAB
-    vs = WALL + SUP_SIDE                                        # the fins start clear of the panel's inner face
-    zs = z0 + (vs - v0) * (z1 - z0) / (v1 - v0)                 # the tab's underside there, on its 45-degree start
-    fin = [(vs, 0), (v2, 0), (v2, z1 - SUP_GAP), (v1, z1 - SUP_GAP), (vs, zs - SUP_GAP)]
-    p = wprofile(wall, f0, f1 - f0, [(vs, 0), (v2, 0), (v2, SUP_FOOT), (vs, SUP_FOOT)])
-    n = int((f1 - f0 - SUP_T) // SUP_PITCH) + 1
-    first = f0 + (f1 - f0 - SUP_T - (n - 1) * SUP_PITCH) / 2
-    for i in range(n):
-        p += wprofile(wall, first + i * SUP_PITCH, SUP_T, fin)
-    return p
 
 
 def standing(name, p):
@@ -363,24 +309,6 @@ def main():
         m.add_shape(Pos(x, y, 0) * p, linear_deflection=0.02, angular_deflection=0.2)
         x, row = x + bb.X + 8, max(row, bb.Y)
     m.write(os.path.join(OUT, "ableemstation-panels-all.3mf"))
-    # the same panels with their breakaway ears and tab props; the ears touch a panel only through the bridges, the
-    # props not at all
-    eared, m, x, y, row = {}, Mesher(), 0.0, 0.0, 0.0
-    for n, p in panels.items():
-        e, t = ears(n.split("-")[0]), tab_props(n.split("-")[0])
-        bridges = (e & p).volume
-        assert 0 < bridges < 3.0, "panel %s: the ears touch it with %.2f mm3, not just through the bridges" % (n, bridges)
-        assert (t & p).volume < 1e-6, "panel %s: the tab props touch it" % n
-        eared[n] = standing(n, p + e + t)
-        write_3mf("panel-%s-ears" % n, eared[n])
-    print("panels with ears + tab props: %s (bridges %.2f mm3 per panel)" % (", ".join(eared), bridges))
-    for n, p in eared.items():
-        bb = p.bounding_box().size
-        if x and x + bb.X > 250:
-            x, y, row = 0.0, y + row + 4, 0.0
-        m.add_shape(Pos(x, y, 0) * p, linear_deflection=0.02, angular_deflection=0.2)
-        x, row = x + bb.X + 4, max(row, bb.Y)
-    m.write(os.path.join(OUT, "ableemstation-panels-all-ears.3mf"))
     # the panels' filament change: printed bottom-up, the first layer at or above the shell's colour line
     # (the shell prints roof-down: its change at H - BAND from the roof is the line H - change from the bottom)
     pchange = {k: first_layer_at(H - first_layer_at(H - BAND, f, lh), f, lh) for k, (f, lh) in LAYERS.items()}
