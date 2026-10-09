@@ -134,7 +134,7 @@ writes it to `build/checks/` (git-ignored):
 | `make_led_holder_check.py` | the LED corner: tube vs RGB block, how far each holder reaches into the shell |
 | `make_switch_check.py` | the switch bracket with two 6x6x5 tact switches: where a switch hits the bracket |
 | `make_fit_coupon.py` | a small test print of the universal shell's front opening + the blank panel, to try the panel clearance without printing a shell |
-| `make_switch_coupon.py` | a 44x9x21 mm test print of the switch pockets (6.8 mm) and leg holes (2.0 mm), to try the tactile switches before printing the base |
+| `make_switch_coupon.py` | a 44x9x21 mm test print of the switch pockets (6.70 x 6.25 mm) and leg holes (2.0 mm round), to try the tactile switches before printing the base |
 
 ## Printing (ASA or PLA, no supports)
 
@@ -234,7 +234,7 @@ and most of the shell are the Pi 3 case's. What differs are the ports on two edg
 | 4 | M3 heat-set insert, Voron's standard M3 x 5 x 4 (the bosses have a 4.7 mm hole, 6 mm deep), pressed into the shell's bosses |
 | 4 | M3 x 8 countersunk screw (base -> inserts) |
 | 4 | M2.5 x 5 screw (Pi -> standoffs, cuts its own thread in the 2.3 mm hole; a 0.6 mm lead-in chamfer on top) |
-| 2 | 6 x 6 mm tactile switch, 5 mm tall, 4 pins through-hole, on its back in the bracket's pocket, each leg through its own hole - solder the wires to the legs behind the bracket |
+| 2 | 6 x 6 mm tactile switch, 5 mm tall, 4 pins through-hole, on its back in the bracket's pocket, each leg through its own hole - solder the wires to the legs behind the bracket. The bracket has a rear well round each switch (0.6 mm membrane left, 3 mm wider in x) so the side legs can be bent outward. Print the switch coupon first; the pocket is 6.70 x 6.25 mm for a 6.5 x 6.0 mm switch |
 | 1 | the front light, either: a 5 mm diffused LED + 330 Ω 1/4 W resistor (100 Ω for blue / white / cyan), or one WS2812B pixel cut from a 5 V, 10 mm strip + 330 Ω resistor |
 | 6-7 | jumper wire female-female (Dupont), 20 cm, + heat-shrink tube |
 | 4 | rubber feet Ø 12 mm |
