@@ -190,12 +190,12 @@ def base():
     # reach the microSD from below: a finger's room (35 x 20), out from the board's edge - clear of the feet, the
     # standoffs and the rating plate's field
     b -= box(BX + 3 - 35, BY + 28 - 10, -1, 35, 20, BASE_T + 2)
-    # switch bracket: 6x6 tact switches lie on their backs facing the buttons, in pockets 6.3 x 6.3 x 3.7; each leg
+    # switch bracket: 6x6 tact switches lie on their backs facing the buttons, in pockets SW_POCKET x SW_POCKET x 3.7; each leg
     # goes through its own hole in the bracket's back (SW_BACK thick), so the legs stick out behind it to be soldered
     yb = switch_floor() - SW_BACK                # the bracket's back face
     b += box(BTN_X[0] - 8, yb, BASE_T, BTN_X[1] - BTN_X[0] + 16, 6.6 - (3.0 - SW_BACK), BTN_Z + 4.5 - BASE_T)
     for x in BTN_X:
-        b -= box(x - 3.15, yb + SW_BACK, BTN_Z - 3.15, 6.3, 3.7, 6.3)
+        b -= box(x - SW_POCKET / 2, yb + SW_BACK, BTN_Z - SW_POCKET / 2, SW_POCKET, 3.7, SW_POCKET)
         for lx, lz in SW_LEGS:
             b -= cyl_y(x + lx, yb - 1, BTN_Z + lz, SW_LEG_R, SW_BACK + 1.5)
     return b
@@ -203,7 +203,8 @@ def base():
 
 # the 6x6 x 5 mm THT tact switch: four legs 6.5 mm apart across the plunger's sides and 4.5 mm along them, 3.5 mm long
 SW_LEGS = [(sx * 3.25, sz * 2.25) for sx in (-1, 1) for sz in (-1, 1)]
-SW_LEG_R, SW_BACK = 0.65, 1.8            # a leg's hole (legs 0.7 x 0.3; a small printed hole comes out tighter), the back
+SW_LEG_R, SW_BACK = 1.0, 1.8            # a leg's hole: 2.0 mm round (a leg is ~0.7 x 0.3, some switches have wider ones; printed holes come out smaller)
+SW_POCKET = 6.8                          # the body's pocket, 6.8 x 6.8 for a 6.0-6.2 body (a test print: 6.3 was too tight)
 
 
 def switch_floor():
